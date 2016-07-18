@@ -3,20 +3,37 @@
 
 using namespace std;
 
+// Global variable declarations
+constexpr int WORD_LENGTH = 5;
+
+// Function declarations
+void PrintIntro();
+string GetGuess();
+
+// The Entry point for this application
 int main() {
-	constexpr int WORD_LENGTH = 5;
 	
-	//Introduce the game
-	cout << "Greetings and Welcome to Bulls and Cows." << endl;
-	cout << "Can you guess the " << WORD_LENGTH << " letter isogram that I am thinking of?" << endl;
-
-	// Get a guess from the player
-	string Guess = "";
-	cout << "Enter your guess: ";
-	cin >> Guess;
-	cout << endl;
-
+	PrintIntro();
+	string Guess = GetGuess();
 	// Repeat the guess back to the user
 	cout << "The inputted word was: " << Guess << endl;
-	return 0;
+
+	Guess = GetGuess();
+	// Repeat the guess back to the user
+	cout << "The inputted word was: " << Guess << endl;
+}
+
+// Introduce the game
+void PrintIntro() {
+	cout << "Greetings and Welcome to Bulls and Cows." << endl;
+	cout << "Can you guess the " << WORD_LENGTH << " letter isogram that I am thinking of?" << endl;
+}
+
+// Get a guess from the player
+string GetGuess() {
+	string Guess = "";
+	cout << "Enter your guess: ";
+	getline(cin, Guess);
+	cout << endl;
+	return Guess;
 }
