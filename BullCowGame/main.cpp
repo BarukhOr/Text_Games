@@ -1,6 +1,7 @@
 #include <iostream>
+using namespace std;
 
 int main() {
-	std::cout << "Greetings and Welcome to Bulls and Cows \n\n";
+	cout << "Greetings and Welcome to Bulls and Cows" << endl;
 	return 0;
 }
