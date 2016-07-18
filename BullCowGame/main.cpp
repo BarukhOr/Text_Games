@@ -14,13 +14,15 @@ string GetGuess();
 int main() {
 	
 	PrintIntro();
-	string Guess = GetGuess();
-	// Repeat the guess back to the user
-	cout << "The inputted word was: " << Guess << endl;
 
-	Guess = GetGuess();
-	// Repeat the guess back to the user
-	cout << "The inputted word was: " << Guess << endl;
+	string Guess = "";
+	constexpr int NUMBER_OF_TURNS = 5;
+	// Loop for the number of turns asking for guesses
+	for (int counter = 0; counter < NUMBER_OF_TURNS; counter++) {
+		Guess = GetGuess();
+		// Repeat the guess back to the user
+		cout << "The inputted word was: " << Guess << endl;
+	}
 }
 
 // Introduce the game
