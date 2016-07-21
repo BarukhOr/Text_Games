@@ -5,6 +5,9 @@
 // Global variable declarations
 constexpr int WORD_LENGTH = 5;
 
+//Instantiate a new game
+FBullCowGame BCGame;
+
 // Function declarations
 void PrintIntro();
 std::string GetGuess();
@@ -26,21 +29,24 @@ void PrintIntro() {
 
 // Get a guess from the player
 std::string GetGuess() {
+	int CurrentTry = BCGame.GetCurrentTry();
 	std::string Guess = "";
-	std::cout << "Enter your guess: ";
+	std::cout << "Try " << CurrentTry << ". Enter your guess: ";
 	std::getline(std::cin, Guess);
 	std::cout << std::endl;
 	return Guess;
 }
 
 void PlayGame() {
-	FBullCowGame BCGame;
+	BCGame.Reset();
+	int MaxTries = BCGame.GetMaxTries();
+	std::cout << "You have a maximum of " << MaxTries << " tries available" << std::endl;
+
 	bool bPlayAgain = false;
 
 	do {
-		constexpr int NUMBER_OF_TURNS = 1;
 		// Loop for the number of turns asking for guesses
-		for (int counter = 0; counter < NUMBER_OF_TURNS; counter++) {
+		for (int counter = 0; counter < MaxTries; counter++) {
 			std::string Guess = GetGuess();
 			std::cout << "The inputted word was: " << Guess << std::endl;
 		}

@@ -1,31 +1,29 @@
 #include "FBullCowGame.h"
 
-void FBullCowGame::Reset(){
-
+FBullCowGame::FBullCowGame() {
+	Reset();
 }
 
-int FBullCowGame::GetMaxTries() {
-	return 0;
-}
+// Getters
+int FBullCowGame::GetMaxTries() const { return MyMaxTries; }
+int FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
+bool FBullCowGame::IsGameWon() const { return false; }
 
-int FBullCowGame::GetCurrentTry() {
-	return 0;
-}
+// Setters
+void FBullCowGame::SetMaxTries(int number) { MyMaxTries = number; }
+void FBullCowGame::SetCurrentTry(int number) { MyCurrentTry = number; }
 
-bool FBullCowGame::IsGameWon() {
-	return false;
+void FBullCowGame::Reset() {
+	constexpr int MAX_TRIES = 2;
+	constexpr int CURRENT_TRY = 1;
+
+	SetMaxTries(MAX_TRIES);
+	SetCurrentTry(CURRENT_TRY);
+	return;
 }
 
 bool FBullCowGame::CheckGuessValidity(std::string variable) {
 	return false;
-}
-
-void FBullCowGame::SetMaxTries() {
-
-}
-
-int FBullCowGame::MyCurrentTry() {
-	return 0;
 }
 
 bool FBullCowGame::IsIsogram(std::string) {
