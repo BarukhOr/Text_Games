@@ -9,7 +9,6 @@
 
 // Acclimating to Unreal syntax, wherein FText is oft used for user interaction
 using FText = std::string;
-// Unreal's suggested implementation of int
 using int32 = int;
 
 // Global variable declarations
@@ -58,11 +57,14 @@ void PlayGame() {
 		// Loop for the number of turns asking for guesses
 		//TODO change from FOR to WHILE once we begin validating tries
 		for (int32 counter = 0; counter < MaxTries; counter++) {
-			FText Guess = GetGuess();
 			// TODO check for valid guesses
-			// TODO submit valid guesses to the game
+			FText Guess = GetGuess();
+
+			// TODO submit valid guesses to the game and receive counts
+			FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+
 			// TODO print number of bulls and cows
-			std::cout << "The inputted word was: " << Guess << std::endl;
+			std::cout << "Bulls = " << BullCowCount.Bulls << ". Cows = " << BullCowCount.Cows << std::endl;
 		}
 		// TODO add a game summary
 		bPlayAgain = AskToPlayAgain();
