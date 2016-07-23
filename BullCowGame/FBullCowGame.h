@@ -10,16 +10,37 @@ struct FBullCowCount {
 	int32 Cows = 0;
 };
 
+enum class EGuessStatus {
+	OK,
+	Not_Isogram,
+	Invalid_Word_Length,
+	Invalid_Characters,
+	Invalid_Status,
+	Not_Lowercase	// TODO convert user input to lowercase using tolower()
+};
+
+enum class EReset {
+	OK,
+	No_Hidden_Word,
+	Invalid_Status
+};
+
 class FBullCowGame {
 public:
 	FBullCowGame(); // constructor
 
+	bool IsGameWon() const;
+	bool IsLengthValid(FString) const;
+
 	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
-	bool IsGameWon() const;
+	int32 GetHiddenWordLength() const;
 
-	void Reset(); // Todo make a more rich return value ... perhaps a bool?
-	bool CheckGuessValidity(FString); // TODO make a more rich return value
+	FString ConvertToLowerCase(FString) const;
+
+	EGuessStatus CheckGuessValidity(FString) const; // TODO make a more rich return value
+	EReset Reset(); // Todo make a more rich return value ... perhaps a bool?
+
 	bool IsIsogram(FString);
 	// Create a function that will count bulls and cows
 	FBullCowCount SubmitGuess(FString);

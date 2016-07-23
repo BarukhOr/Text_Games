@@ -7,19 +7,19 @@
 #include <string>
 #include "FBullCowGame.h"
 
-// Acclimating to Unreal syntax, wherein FText is oft used for user interaction
-using FText = std::string;
+// Acclimating to Unreal syntax, wherein FString is oft used for user interaction
+using FString = std::string;
 using int32 = int;
 
 // Global variable declarations
-constexpr int32 WORD_LENGTH = 5;
+//constexpr int32 WORD_LENGTH = 5;
 
 //Instantiate a new game
 FBullCowGame BCGame;
 
 // Function declarations
 void PrintIntro();
-FText GetGuess();
+FString GetValidGuess();
 void PlayGame();
 bool AskToPlayAgain();
 
@@ -33,17 +33,37 @@ int main() {
 // Introduce the game
 void PrintIntro() {
 	std::cout << "Greetings and Welcome to Bulls and Cows." << std::endl;
-	std::cout << "Can you guess the " << WORD_LENGTH << " letter isogram that I am thinking of?" << std::endl;
+	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength() << " letter isogram that I am thinking of?" << std::endl;
 }
 
-// Get a guess from the player
-FText GetGuess() {
-	int32 CurrentTry = BCGame.GetCurrentTry();
-	FText Guess = "";
-	std::cout << "Try " << CurrentTry << ". Enter your guess: ";
-	std::getline(std::cin, Guess);
-	std::cout << std::endl;
-	return Guess;
+// Loop continuously until the user inputs a valid guess
+FString GetValidGuess() {
+	EGuessStatus GuessStatus = EGuessStatus::Invalid_Status;
+	do {
+		int32 CurrentTry = BCGame.GetCurrentTry();
+		FString Guess = "";
+
+		std::cout << "Try " << CurrentTry << ". Enter your guess: ";
+		std::getline(std::cin, Guess);
+		std::cout << std::endl;
+
+		// TODO check for valid guesses
+		GuessStatus = BCGame.CheckGuessValidity(Guess);
+		switch (GuessStatus) {
+		case EGuessStatus::Invalid_Characters:
+			std::cout << "Please enter a valid string." << std::endl;
+			break;
+		case EGuessStatus::Invalid_Word_Length:
+			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " letter word." << std::endl;
+			break;
+		case EGuessStatus::Not_Isogram:
+			std::cout << "Please enter a word with non-recurring letters" << std::endl;
+			break;
+		default:
+			std::cout << "No errors detected within your input" << std::endl;
+			return Guess;
+		}
+	} while (GuessStatus != EGuessStatus::OK); // Continue looping until there are no input errors
 }
 
 void PlayGame() {
@@ -57,13 +77,14 @@ void PlayGame() {
 		// Loop for the number of turns asking for guesses
 		//TODO change from FOR to WHILE once we begin validating tries
 		for (int32 counter = 0; counter < MaxTries; counter++) {
-			// TODO check for valid guesses
-			FText Guess = GetGuess();
+			FString Guess = GetValidGuess();
+
+			Guess = BCGame.ConvertToLowerCase(Guess);
+			std::cout << "Lower casified string is: " << Guess << std::endl;
 
 			// TODO submit valid guesses to the game and receive counts
 			FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
 
-			// TODO print number of bulls and cows
 			std::cout << "Bulls = " << BullCowCount.Bulls << ". Cows = " << BullCowCount.Cows << std::endl;
 		}
 		// TODO add a game summary
@@ -73,7 +94,7 @@ void PlayGame() {
 
 bool AskToPlayAgain() {
 	std::cout << "Do you want to play again? \n" << std::endl << "Press y for yes or n for no. \n";
-	FText Response = "";
+	FString Response = "";
 	std::getline(std::cin, Response);
 	return (Response[0] == 'y') || (Response[0] == 'Y');
 }

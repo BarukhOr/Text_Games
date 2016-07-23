@@ -1,4 +1,6 @@
 #include "FBullCowGame.h"
+#include <iostream>
+#include <string>
 
 using FString = std::string;
 using int32 = int;
@@ -8,15 +10,43 @@ FBullCowGame::FBullCowGame() {
 }
 
 // Getters
+bool FBullCowGame::IsGameWon() const { return false; }
+bool FBullCowGame::IsLengthValid(FString Guess) const {
+	if (Guess.length() != GetHiddenWordLength()) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
-bool FBullCowGame::IsGameWon() const { return false; }
+int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 
-// Setters
-void FBullCowGame::SetMaxTries(int32 number) { MyMaxTries = number; }
-void FBullCowGame::SetCurrentTry(int32 number) { MyCurrentTry = number; }
+FString FBullCowGame::ConvertToLowerCase(FString Guess) const {	// TODO make this function more locale friendly
+	for (char& SingleChar : Guess) {
+		SingleChar = tolower(SingleChar);
+	}
+	return Guess;
+}
 
-void FBullCowGame::Reset() {
+EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
+	if (false) { // if the guess is not an isogram
+		return EGuessStatus::Not_Isogram;
+	}
+	else if (IsLengthValid(Guess)) { // if the length of the word is invalid ()
+		return EGuessStatus::Invalid_Word_Length;
+	}
+	else if (false) { // if the guess contains invalid characters
+		return EGuessStatus::Invalid_Characters;
+	}
+	else {
+		return EGuessStatus::OK;
+	}
+}
+
+EReset FBullCowGame::Reset() {
 	constexpr int MAX_TRIES = 2;
 	constexpr int CURRENT_TRY = 1;
 
@@ -25,12 +55,14 @@ void FBullCowGame::Reset() {
 
 	SetMaxTries(MAX_TRIES);
 	SetCurrentTry(CURRENT_TRY);
-	return;
+	return EReset::OK;
 }
 
-bool FBullCowGame::CheckGuessValidity(FString variable) {
-	return false;
-}
+// Setters
+void FBullCowGame::SetMaxTries(int32 number) { MyMaxTries = number; }
+void FBullCowGame::SetCurrentTry(int32 number) { MyCurrentTry = number; }
+
+
 
 bool FBullCowGame::IsIsogram(FString word) {
 	return false;
