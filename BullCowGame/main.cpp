@@ -11,9 +11,6 @@
 using FString = std::string;
 using int32 = int;
 
-// Global variable declarations
-//constexpr int32 WORD_LENGTH = 5;
-
 //Instantiate a new game
 FBullCowGame BCGame;
 
@@ -26,7 +23,10 @@ bool AskToPlayAgain();
 // The Entry point for this application
 int main() {
 	PrintIntro();
-	PlayGame();
+	do {
+		PlayGame();
+	} while (AskToPlayAgain());
+
 	return 0;	// Exit the application
 }
 
@@ -38,11 +38,10 @@ void PrintIntro() {
 
 // Loop continuously until the user inputs a valid guess
 FString GetValidGuess() {
+	FString Guess = "";
 	EGuessStatus GuessStatus = EGuessStatus::Invalid_Status;
 	do {
 		int32 CurrentTry = BCGame.GetCurrentTry();
-		FString Guess = "";
-
 		std::cout << "Try " << CurrentTry << ". Enter your guess: ";
 		std::getline(std::cin, Guess);
 		std::cout << std::endl;
@@ -60,10 +59,11 @@ FString GetValidGuess() {
 			std::cout << "Please enter a word with non-recurring letters" << std::endl;
 			break;
 		default:
-			std::cout << "No errors detected within your input" << std::endl;
-			return Guess;
+			// this implies that there were no detected errors within the Guess
+			break;
 		}
 	} while (GuessStatus != EGuessStatus::OK); // Continue looping until there are no input errors
+	return Guess;
 }
 
 void PlayGame() {
@@ -71,25 +71,20 @@ void PlayGame() {
 	int32 MaxTries = BCGame.GetMaxTries();
 	std::cout << "You have a maximum of " << MaxTries << " tries available" << std::endl;
 
-	bool bPlayAgain = false;
+	/*
+	* Loop asking for guesses while the game is not won
+	* and there are still tries remaining
+	*/
+	while (!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries) {
+		FString Guess = GetValidGuess();
+		Guess = BCGame.ConvertToLowerCase(Guess);
+		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
 
-	do {
-		// Loop for the number of turns asking for guesses
-		//TODO change from FOR to WHILE once we begin validating tries
-		for (int32 counter = 0; counter < MaxTries; counter++) {
-			FString Guess = GetValidGuess();
+		std::cout << "Bulls = " << BullCowCount.Bulls << ". Cows = " << BullCowCount.Cows << std::endl;
+	}
 
-			Guess = BCGame.ConvertToLowerCase(Guess);
-			std::cout << "Lower casified string is: " << Guess << std::endl;
-
-			// TODO submit valid guesses to the game and receive counts
-			FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
-
-			std::cout << "Bulls = " << BullCowCount.Bulls << ". Cows = " << BullCowCount.Cows << std::endl;
-		}
-		// TODO add a game summary
-		bPlayAgain = AskToPlayAgain();
-	} while (bPlayAgain);
+	// TODO summarize the game
+	return;
 }
 
 bool AskToPlayAgain() {

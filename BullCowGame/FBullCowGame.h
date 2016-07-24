@@ -31,6 +31,7 @@ public:
 
 	bool IsGameWon() const;
 	bool IsLengthValid(FString) const;
+	bool IsIsogram(FString);
 
 	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
@@ -38,19 +39,18 @@ public:
 
 	FString ConvertToLowerCase(FString) const;
 
-	EGuessStatus CheckGuessValidity(FString) const; // TODO make a more rich return value
-	EReset Reset(); // Todo make a more rich return value ... perhaps a bool?
-
-	bool IsIsogram(FString);
-	// Create a function that will count bulls and cows
+	EGuessStatus CheckGuessValidity(FString) const;
+	EReset Reset();
 	FBullCowCount SubmitGuess(FString);
-	// Create a function that will increment the current try assuming valid guess
-	void IncrementCurrentTry();
 
 private:
+	bool bIsWon = false;
+
+	int32 MyCurrentTry = 1;
+	int32 MyMaxTries = 10;
+
+	FString MyHiddenWord;
+
 	void SetMaxTries(int32);
 	void SetCurrentTry(int32);
-	FString MyHiddenWord;
-	int32 MyCurrentTry = 1;
-	int32 MyMaxTries = 5;
 };
