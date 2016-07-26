@@ -4,29 +4,25 @@
 */
 
 #include <iostream>
-#include <string>
 #include "FBullCowGame.h"
-
-// Acclimating to Unreal syntax, wherein FString is oft used for user interaction
-using FString = std::string;
-using int32 = int;
 
 //Instantiate a new game
 FBullCowGame BCGame;
 
 // Function declarations
-void PrintIntro();
+bool AskToPlayAgain();
 FString GetValidGuess();
 void PlayGame();
-bool AskToPlayAgain();
+void PrintGameSummary();
+void PrintIntro();
 
 // The Entry point for this application
 int main() {
 	PrintIntro();
-	do {
+	do{
 		PlayGame();
-	} while (AskToPlayAgain());
-
+	}while(AskToPlayAgain());
+		
 	return 0;	// Exit the application
 }
 
@@ -46,11 +42,10 @@ FString GetValidGuess() {
 		std::getline(std::cin, Guess);
 		std::cout << std::endl;
 
-		// TODO check for valid guesses
 		GuessStatus = BCGame.CheckGuessValidity(Guess);
 		switch (GuessStatus) {
 		case EGuessStatus::Invalid_Characters:
-			std::cout << "Please enter a valid string." << std::endl;
+			std::cout << "Your previous string contained invalid characters. Please enter a valid string." << std::endl;
 			break;
 		case EGuessStatus::Invalid_Word_Length:
 			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " letter word." << std::endl;
@@ -72,24 +67,33 @@ void PlayGame() {
 	std::cout << "You have a maximum of " << MaxTries << " tries available" << std::endl;
 
 	/*
-	* Loop asking for guesses while the game is not won
-	* and there are still tries remaining
-	*/
-	while (!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries) {
+	 * Loop asking for guesses while the game is not won
+	 * and there are still tries remaining
+	 */
+	 while( !BCGame.IsGameWon()  && BCGame.GetCurrentTry() <= MaxTries){
 		FString Guess = GetValidGuess();
 		Guess = BCGame.ConvertToLowerCase(Guess);
 		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
-
+		
 		std::cout << "Bulls = " << BullCowCount.Bulls << ". Cows = " << BullCowCount.Cows << std::endl;
-	}
-
-	// TODO summarize the game
-	return;
+	 }
+	 
+	 PrintGameSummary();
+	 return;
 }
 
 bool AskToPlayAgain() {
-	std::cout << "Do you want to play again? \n" << std::endl << "Press y for yes or n for no. \n";
+	std::cout << "Do you want to play again with the same hidden word?" << std::endl << "Press y for yes or n for no. \n";
 	FString Response = "";
 	std::getline(std::cin, Response);
 	return (Response[0] == 'y') || (Response[0] == 'Y');
+}
+
+void PrintGameSummary(){
+	// Provide victory or defeat message
+	if(BCGame.IsGameWon()){
+		std::cout << "Congratulations! You win! " << std::endl;
+	}else{
+		std::cout << "Better luck next time~ " << std::endl;
+	}
 }

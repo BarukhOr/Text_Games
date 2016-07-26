@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+// Acclimating to Unreal syntax
 using FString = std::string;
 using int32 = int;
 
@@ -15,8 +16,7 @@ enum class EGuessStatus {
 	Not_Isogram,
 	Invalid_Word_Length,
 	Invalid_Characters,
-	Invalid_Status,
-	Not_Lowercase	// TODO convert user input to lowercase using tolower()
+	Invalid_Status
 };
 
 enum class EReset {
@@ -31,7 +31,7 @@ public:
 
 	bool IsGameWon() const;
 	bool IsLengthValid(FString) const;
-	bool IsIsogram(FString);
+	bool AreCharValid(FString) const;
 
 	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
@@ -45,6 +45,7 @@ public:
 
 private:
 	bool bIsWon = false;
+	bool IsIsogram(FString) const;
 
 	int32 MyCurrentTry = 1;
 	int32 MyMaxTries = 10;
